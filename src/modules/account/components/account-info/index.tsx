@@ -113,7 +113,7 @@ const AccountInfo = ({
         >
           <div className="flex flex-col gap-y-2 py-4">
             <div>{children}</div>
-            <div className="flex items-center justify-end mt-2">
+            {/* <div className="flex items-center justify-end mt-2">
               <Button
                 isLoading={isLoading}
                 className="w-full small:max-w-[140px]"
@@ -121,7 +121,7 @@ const AccountInfo = ({
               >
                 Save changes
               </Button>
-            </div>
+            </div> */}
           </div>
         </Disclosure.Panel>
       </Disclosure>

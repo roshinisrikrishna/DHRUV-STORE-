@@ -41,8 +41,9 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
       ? get(errors, props.name) && get(touched, props.name)
       : false
 
+      //changed conditional statement to show error for form validation - customization
     useEffect(() => {
-      if (innerRef.current && innerRef.current.value === "") {
+      if (innerRef.current && (innerRef.current.value === "" || innerRef.current.value === "-" || innerRef.current.value === "Select...")) {
         setIsPlaceholder(true)
       } else {
         setIsPlaceholder(false)

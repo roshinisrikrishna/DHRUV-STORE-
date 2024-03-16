@@ -1,17 +1,24 @@
 "use client"
 
-import { useAccount } from "@lib/context/account-context"
-import ProfileEmail from "@modules/account/components/profile-email"
-import ProfileName from "@modules/account/components/profile-name"
-import ProfilePassword from "@modules/account/components/profile-password"
-import ProfileBillingAddress from "../components/profile-billing-address"
-import ProfilePhone from "../components/profile-phone"
+import React from "react";
+import { useAccount } from "@lib/context/account-context";
+import ProfileEmail from "@modules/account/components/profile-email";
+import ProfileName from "@modules/account/components/profile-name";
+import ProfilePassword from "@modules/account/components/profile-password";
+import ProfileBillingAddress from "../components/profile-billing-address";
+import ProfilePhone from "../components/profile-phone";
+import Spinner from "@modules/common/icons/spinner"; // Adjust the import path as needed
 
 const ProfileTemplate = () => {
-  const { customer, retrievingCustomer, refetchCustomer } = useAccount()
+  const { customer, retrievingCustomer } = useAccount();
 
+  // Render Spinner while retrieving customer data
   if (retrievingCustomer || !customer) {
-    return null
+    return (
+      <div className="flex items-center justify-center w-full min-h-screen">
+        <Spinner size={36} /> {/* Adjust Spinner usage as per your implementation */}
+      </div>
+    );
   }
 
   return (
@@ -20,7 +27,7 @@ const ProfileTemplate = () => {
         <h1 className="text-2xl-semi">Profile</h1>
         <p className="text-base-regular">
           View and update your profile information, including your name, email,
-          and phone number. You can also update your billing address, or change
+          and phone number. You can also update your billing address or change
           your password.
         </p>
       </div>
@@ -36,11 +43,11 @@ const ProfileTemplate = () => {
         <ProfileBillingAddress customer={customer} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Divider = () => {
-  return <div className="w-full h-px bg-gray-200" />
-}
+  return <div className="w-full h-px bg-gray-200" />;
+};
 
-export default ProfileTemplate
+export default ProfileTemplate;
