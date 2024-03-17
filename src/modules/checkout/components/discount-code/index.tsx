@@ -57,6 +57,26 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
   })
 
   const onApply = (data: DiscountFormValues) => {
+    let isEligibleForDiscount = true;
+    let failedItemTitle = '';
+    let failedItemBuyGetNum;
+  
+    for (const item of cart.items) {
+      const { discountCode, buy_get_num, title } = item.variant.product;
+      if (discountCode === data.discount_code && (typeof buy_get_num !== 'number' || item.quantity < buy_get_num)) {
+        isEligibleForDiscount = false;
+        failedItemTitle = title;
+        failedItemBuyGetNum = buy_get_num;
+        break;
+      }
+    }
+  
+    if (!isEligibleForDiscount) {
+      alert(`Discount can only be applied if the product ${failedItemTitle}'s quantity is greater than ${failedItemBuyGetNum} for the specified discount code.`);
+      return;
+    }
+  
+    // Apply discount if eligible
     mutate(
       {
         discounts: [{ code: data.discount_code }],
@@ -64,12 +84,19 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
       {
         onSuccess: ({ cart }) => setCart(cart),
         onError: () => {
-          checkGiftCard(data.discount_code)
+          setError(
+            "discount_code",
+            {
+              message: "Unable to apply discount",
+            },
+            {
+              shouldFocus: true,
+            }
+          );
         },
       }
-    )
-  }
-
+    );
+  };
   const checkGiftCard = (code: string) => {
     mutate(
       {
