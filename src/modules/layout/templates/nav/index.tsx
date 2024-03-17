@@ -40,7 +40,7 @@ const Nav = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    axios.get(`${MEDUSA_BACKEND_URL}/store/products`, { withCredentials: true })
+    axios.get('http://195.35.20.220:9000/store/products', { withCredentials: true })
     .then(response => {
         setProducts(response.data.products);
       })

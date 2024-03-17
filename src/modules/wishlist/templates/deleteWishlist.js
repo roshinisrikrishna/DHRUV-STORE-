@@ -2,10 +2,9 @@
 import { RegisterOptions } from "react-hook-form"; // Not used in this snippet
 import Medusa from "@medusajs/medusa-js";
 import axios from 'axios';
-import { MEDUSA_BACKEND_URL } from "@lib/config";
 
 // Initialize Medusa client with your local server's URL and a maximum retry limit
-const medusa = new Medusa({ baseUrl: MEDUSA_BACKEND_URL, maxRetries: 3 });
+const medusa = new Medusa({ baseUrl: "http://localhost:9000", maxRetries: 3 });
 
 // Define an asynchronous function to delete a wishlist item
 export const deleteWishlist = async (id) => {
@@ -15,7 +14,7 @@ export const deleteWishlist = async (id) => {
 
         // Making a DELETE request using axios to remove the wishlist item
         // The item to be deleted is identified by its id
-        const deleteResponse = await axios.delete(`${MEDUSA_BACKEND_URL}/store/wishlist?id=${id}`, {
+        const deleteResponse = await axios.delete(`http://localhost:9000/store/wishlist?id=${id}`, {
             headers: {
                 'Content-Type': 'application/json' // Setting the content type to JSON
             }

@@ -4,13 +4,13 @@ import React from "react";
 
 const LoadingSpinner = () => {
   return (
-    <div className="loader">
+    <div className="loader-style">
       {/* Spinner circle that will rotate */}
       {/* <div className="spinner"></div> */}
       {/* Text that remains static */}
       <div>Please wait while we load the page for you...</div>
       <style>{`
-        .loader {
+        .loader-style {
           position: fixed;
           top: 0;
           left: 0;

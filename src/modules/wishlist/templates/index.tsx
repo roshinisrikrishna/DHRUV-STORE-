@@ -28,9 +28,7 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { useWishlistDropdownContext } from "@lib/context/wishlist-dropdown-context"
 import { getDiscountList } from "./productDiscount"
-import { MEDUSA_BACKEND_URL } from "@lib/config";
 import './Wishlist.css';
-
 
 // Defining types for wishlist items and favorite items
 interface FavoriteItem {
@@ -54,7 +52,7 @@ type WishlistItem = {
 
 // Initializing the Medusa client
 const medusa = new Medusa({
-  baseUrl: MEDUSA_BACKEND_URL,
+  baseUrl: "http://localhost:9000",
   maxRetries: 3,
 });
 
@@ -153,12 +151,11 @@ useEffect(() => {
   
     const fetchWishlist = async () => {
       const data = await handleData();
-      // Ensure data is defined and has a wishlist property
-      if (data && data.wishlist && Array.isArray(data.wishlist)) {
+      if (data.wishlist && Array.isArray(data.wishlist)) {
         data.wishlist.forEach((item: FavoriteItem) => {
           medusa.products.variants.retrieve(item.variant_id)
             .then(({ variant }) => {
-              if (!variant || !variant.product) return; // Guard against undefined variant or product
+              if (isCancelled) return;
               // Use a functional update to ensure the latest state is used
               setWishlistItems(prevItems => {
                 // Check if item already exists to prevent duplicates
@@ -172,13 +169,11 @@ useEffect(() => {
                   handle: variant.product?.handle
                 }];
               });
+              // setWishitems(wishlistItems)
             })
         });
-      } else {
-        // Handle the case where data is undefined or doesn't have a wishlist property
-        console.error('Failed to fetch wishlist data or data.wishlist is not an array');
       }
-    };    
+    };
   
     fetchWishlist();
   

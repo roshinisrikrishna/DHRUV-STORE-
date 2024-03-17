@@ -3,10 +3,9 @@
 import { RegisterOptions } from "react-hook-form"; // This import is not used in the snippet
 import Medusa from "@medusajs/medusa-js";
 import axios from 'axios';
-import { MEDUSA_BACKEND_URL } from "@lib/config";
 
 // Initialize Medusa client with your local server's URL and a maximum retry limit
-const medusa = new Medusa({ baseUrl: MEDUSA_BACKEND_URL, maxRetries: 3 });
+const medusa = new Medusa({ baseUrl: "http://localhost:9000", maxRetries: 3 });
 
 // Interface for NameData (not used in the function)
 interface NameData {
@@ -17,7 +16,7 @@ interface NameData {
 export const getWishList = async (customer_id: any) => {
   try {
     // Making a GET request using axios to retrieve wishlist data for a given customer ID
-    const response = await axios.get(`${MEDUSA_BACKEND_URL}/store/wishlist?customer_id=${customer_id}`);
+    const response = await axios.get(`http://localhost:9000/store/wishlist?customer_id=${customer_id}`);
 
     // Logging the response data for debugging purposes
     // console.log("Get Response data GET WISHLIST:", response.data);

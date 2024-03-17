@@ -1,6 +1,8 @@
 import { StoreGetProductsParams } from "@medusajs/medusa"
 import SortProducts, { SortOptions } from "./sort-products"
 import CollectionFilter from "./collection-filter"
+import CategoryFilter from "./category-filter"
+
 
 type RefinementListProps = {
   refinementList: StoreGetProductsParams
@@ -22,6 +24,12 @@ const RefinementList = ({
       <SortProducts sortBy={sortBy} setSortBy={setSortBy} />
       {!search && (
         <CollectionFilter
+          refinementList={refinementList}
+          setRefinementList={setRefinementList}
+        />
+      )}
+         {!search && (
+        <CategoryFilter
           refinementList={refinementList}
           setRefinementList={setRefinementList}
         />

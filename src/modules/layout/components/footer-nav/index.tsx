@@ -41,35 +41,6 @@ const handleLinkClick = (targetPath: string) => {
   setIsNavigating(true); // Assume navigation is starting
 };
  
-// State to track window width
-const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
-
-// Effect to update window width on resize
-useEffect(() => {
-  // Function to update the state to the current window width
-  const handleResize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
-  // Set the width initially and setup event listener for resize
-  handleResize();
-  window.addEventListener('resize', handleResize);
-
-  // Cleanup function to remove the event listener
-  return () => window.removeEventListener('resize', handleResize);
-}, []);
-
-// Determine if the screen width is less than or equal to 1024px
-const isMobile = windowWidth <= 1024;
-// Update isMobile to check for screen width less than or equal to 768 pixels
-const isNarrowScreen = windowWidth <= 768;
-const isSmallerScreen = windowWidth < 500;
-
-
-// Adjust the styling based on isMobile
-const footerStyle = isMobile ? { width: "100%", display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' } : { display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
-
-
   return (
     <>
     {isNavigating && <LoadingSpinner />}
@@ -199,7 +170,7 @@ const footerStyle = isMobile ? { width: "100%", display: 'flex', flexDirection: 
 
         </div>
  
-<div className="flex mb-16 justify-between " style={{ fontSize: "9px", fontFamily: "Avenir Next LT W02 Regular", letterSpacing: "0.1em", fontWeight:  400,   width: isMobile ? "100%" : "70%", }}>
+<div className="flex mb-16 justify-between " style={{ fontSize: "9px", fontFamily: "Avenir Next LT W02 Regular", letterSpacing: "0.1em", fontWeight:  400, width:"70%" }}>
   <p className="footer-paragraph">
   THIS SITE IS PROTECTED BY RECAPTCHA AND THE GOOGLE PRIVACY POLICY AND TERMS OF SERVICE APPLY.
   </p>

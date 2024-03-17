@@ -9,7 +9,7 @@ import {
   StorePostCartsCartReq,
 } from "@medusajs/medusa"
 import Wrapper from "@modules/checkout/components/payment-wrapper"
-import { isEqual } from "lodash"
+import { isEqual, valuesIn } from "lodash"
 import {
   formatAmount,
   useCart,
@@ -90,6 +90,7 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
   const methods = useForm<CheckoutFormValues>({
     defaultValues: mapFormValues(customer, cart, countryCode),
     reValidateMode: "onChange",
+    mode:"onChange"
   })
 
   const {
@@ -256,8 +257,11 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
   }
 
   const setSavedAddress = (address: Address) => {
+    console.log('address setSavedAddress', address)
     const setValue = methods.setValue
+    const setFocus = methods.setFocus
 
+    
     setValue("shipping_address", {
       address_1: address.address_1 || "",
       address_2: address.address_2 || "",
@@ -269,7 +273,32 @@ export const CheckoutProvider = ({ children }: CheckoutProviderProps) => {
       postal_code: address.postal_code || "",
       province: address.province || "",
       company: address.company || "",
-    })
+    },{shouldTouch: true})
+    // setFocus("email");
+    setFocus("shipping_address.first_name");
+    setFocus("shipping_address.last_name");
+    setFocus("shipping_address.address_1");
+    setFocus("shipping_address.address_2");
+    setFocus("shipping_address.postal_code");
+    setFocus("shipping_address.city");
+    setFocus("shipping_address.province");
+    setFocus("shipping_address.phone");
+    setFocus("shipping_address.country_code");
+ 
+    // setValue("email", "", { shouldTouch: true });
+    // setValue("shipping_address.first_name", "", { shouldTouch: true });
+    // setValue("shipping_address.last_name", "", { shouldTouch: true });
+    // setValue("shipping_address.address_1", "", { shouldTouch: true });
+    // setValue("shipping_address.address_2", "", { shouldTouch: true });
+    // setValue("shipping_address.postal_code", "", { shouldTouch: true });
+    // setValue("shipping_address.city", "", { shouldTouch: true });
+    // setValue("shipping_address.province", "", { shouldTouch: true });
+    // setValue("shipping_address.phone", "", { shouldTouch: true });
+    // setValue("shipping_address.country_code", "", { shouldTouch: true });
+
+
+
+    
   }
 
   /**

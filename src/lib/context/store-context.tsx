@@ -122,21 +122,32 @@ export const StoreProvider = ({ children }: StoreProps) => {
 
   const ensureRegion = (region: Region, countryCode?: string | null) => {
     if (!IS_SERVER) {
-      const { regionId, countryCode: defaultCountryCode } = getRegion() || {
-        regionId: region.id,
-        countryCode: region.countries[0].iso_2,
+      let defaultCountryCode;
+      let regionId = region.id;
+      
+      // Check if region.countries is defined and has at least one entry
+      if (region.countries && region.countries.length > 0) {
+        defaultCountryCode = region.countries[0].iso_2;
+      } else {
+        // Handle the case where no countries are defined in the region
+        // You might want to set a default country code or handle this error differently
+        console.error("No countries defined for the region", region);
+        defaultCountryCode = "US"; // Example: Fallback to a default country code if necessary
       }
-
-      const finalCountryCode = countryCode || defaultCountryCode
-
-      if (regionId !== region.id) {
-        setRegion(region.id, finalCountryCode)
+  
+      const { regionId: storedRegionId, countryCode: storedCountryCode } = getRegion() || { regionId, countryCode: defaultCountryCode };
+      
+      const finalCountryCode = countryCode || storedCountryCode;
+  
+      if (storedRegionId !== region.id) {
+        setRegion(region.id, finalCountryCode);
       }
-
-      storeRegion(region.id, finalCountryCode)
-      setCountryCode(finalCountryCode)
+  
+      storeRegion(region.id, finalCountryCode);
+      setCountryCode(finalCountryCode);
     }
-  }
+  };
+  
 
   const storeCart = (id: string) => {
     if (!IS_SERVER) {

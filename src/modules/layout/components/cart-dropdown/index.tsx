@@ -10,21 +10,58 @@ import Thumbnail from "@modules/products/components/thumbnail"
 import { formatAmount, useCart } from "medusa-react"
 import Link from "next/link"
 import { Fragment } from "react"
+import axios from 'axios'
+import { useMeCustomer } from "medusa-react"
+import LoadingSpinner from '@modules/loader'; // Ensure this path matches where your LoadingSpinner component is located.
+import { usePathname, useSearchParams } from 'next/navigation'
+import React, { useState, useEffect } from 'react';
 
 const CartDropdown = () => {
   const { cart, totalItems } = useCart()
+  // console.log("cart ",cart)
+
+  const { customer, isLoading } = useMeCustomer()
+  // console.log(" customer ",customer)
+  const pathname = usePathname();
+  // console.log('pathname', pathname)
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [clickedPath, setClickedPath] = useState('');
+
+  // console.log('clickedPath', clickedPath)
+  // Initialize clickedPath with the current pathname when the component mounts
+  useEffect(() => {
+    setClickedPath(pathname);
+  }, [pathname]);
+
+  useEffect(() => {
+    // Determine if navigation is occurring
+    setIsNavigating(pathname !== clickedPath);
+  }, [pathname, clickedPath]);
+
+  // Function to handle link clicks
+const handleLinkClick = (targetPath: string) => {
+  console.log("Link clicked with path:", targetPath);
+  setClickedPath(targetPath); // Update clickedPath to the target path
+  setIsNavigating(true); // Assume navigation is starting
+};
+ 
+
   const items = useEnrichedLineItems()
   const { deleteItem } = useStore()
   const { state, open, close } = useCartDropdown()
 
   return (
-    <div className="h-full z-50" onMouseEnter={open} onMouseLeave={close}>
-      <Popover className="relative h-full">
-        <Popover.Button className="h-full">
-          <Link
-            className="hover:text-ui-fg-base"
-            href="/cart"
-          >{`Cart (${totalItems})`}</Link>
+    <>
+      {isNavigating && <LoadingSpinner />}
+          <div className="h-full z-50" onMouseEnter={open} onMouseLeave={close} >
+      <Popover className="relative h-full" style={{background:""}}>
+      <Popover.Button className="h-full"  style={{textAlign:"left",background:"",}}>
+          <Link href="/cart"
+           onClick={ ()=> handleLinkClick('/cart') } 
+          style={{background:'#003566', padding:"5.8% 14.5% 5.8% 14.5%", borderRadius:"15px",color:"white"}}>
+            <img src="/cart.png" alt="Cart" className="inline-block mr-1" style={{width:"15%",color:"white", paddingBottom:"2%"}}/>
+            <span style={{fontWeight: 600}}>{totalItems}</span> {/* Keep the totalItems displayed */}
+          </Link>
         </Popover.Button>
         <Transition
           show={state}
@@ -58,6 +95,7 @@ const CartDropdown = () => {
                         <Link
                           href={`/products/${item.variant.product.handle}`}
                           className="w-24"
+                          onClick={ ()=> handleLinkClick(`/products/${item.variant.product.handle}`) }
                         >
                           <Thumbnail thumbnail={item.thumbnail} size="square" />
                         </Link>
@@ -68,7 +106,8 @@ const CartDropdown = () => {
                                 <h3 className="text-base-regular overflow-ellipsis overflow-hidden whitespace-nowrap mr-4 w-[130px]">
                                   <Link
                                     href={`/products/${item.variant.product.handle}`}
-                                  >
+                                    onClick={ ()=> handleLinkClick(`/products/${item.variant.product.handle}`) }
+                                    >
                                     {item.title}
                                   </Link>
                                 </h3>
@@ -114,7 +153,9 @@ const CartDropdown = () => {
                       })}
                     </span>
                   </div>
-                  <Link href="/cart" passHref>
+                  <Link href="/cart" passHref   
+                    onClick={ ()=> handleLinkClick("/cart") }
+>
                     <Button className="w-full" size="large">
                       Go to cart
                     </Button>
@@ -129,7 +170,9 @@ const CartDropdown = () => {
                   </div>
                   <span>Your shopping bag is empty.</span>
                   <div>
-                    <Link href="/store">
+                    <Link href="/store"                     
+                    onClick={ ()=> handleLinkClick("/store") }
+>
                       <>
                         <span className="sr-only">Go to all products page</span>
                         <Button onClick={close}>Explore products</Button>
@@ -143,6 +186,7 @@ const CartDropdown = () => {
         </Transition>
       </Popover>
     </div>
+    </>
   )
 }
 

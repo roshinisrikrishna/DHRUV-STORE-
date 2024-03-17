@@ -10,7 +10,9 @@ import clsx from "clsx"
 import { chunk } from "lodash"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import React, { useState } from "react"
+import LoadingSpinner from '@modules/loader'; // Ensure this path matches where your LoadingSpinner component is located.
+import { usePathname, useSearchParams } from 'next/navigation'
+import React, { useState, useEffect } from 'react';
 
 const DropdownMenu = () => {
   const [open, setOpen] = useState(false)
@@ -20,7 +22,37 @@ const DropdownMenu = () => {
   const { data: products, isLoading: loadingProducts } =
     useFeaturedProductsQuery()
 
+    const pathname = usePathname();
+  // console.log('pathname', pathname)
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [clickedPath, setClickedPath] = useState('');
+
+  // console.log('clickedPath', clickedPath)
+  // Initialize clickedPath with the current pathname when the component mounts
+  useEffect(() => {
+    setClickedPath(pathname);
+  }, [pathname]);
+
+  useEffect(() => {
+    // Determine if navigation is occurring
+    setIsNavigating(pathname !== clickedPath);
+    setOpen(false)
+  }, [pathname, clickedPath]);
+
+  // Function to handle link clicks
+const handleLinkClick = (targetPath: string) => {
+  console.log("Link clicked with path:", targetPath);
+  setClickedPath(targetPath); // Update clickedPath to the target path
+  setIsNavigating(true); // Assume navigation is starting
+  setOpen(false)
+
+};
+ 
+
   return (
+    <>
+      {isNavigating && <LoadingSpinner />}
+   
     <div
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
@@ -34,7 +66,10 @@ const DropdownMenu = () => {
                 className={clsx(
                   "relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none"
                 )}
-                onClick={() => push("/store")}
+                onClick={() => {
+                  push("/store")
+                  handleLinkClick('/store')
+                }}
               >
                 Store
               </Popover.Button>
@@ -76,7 +111,10 @@ const DropdownMenu = () => {
                                     >
                                       <Link
                                         href={`/collections/${collection.handle}`}
-                                        onClick={() => setOpen(false)}
+                                        onClick={() => {
+                                          setOpen(false)
+                                          handleLinkClick(`/collections/${collection.handle}`)  
+                                        }}
                                       >
                                         {collection.title}
                                       </Link>
@@ -114,6 +152,7 @@ const DropdownMenu = () => {
         </Popover>
       </div>
     </div>
+    </>
   )
 }
 
