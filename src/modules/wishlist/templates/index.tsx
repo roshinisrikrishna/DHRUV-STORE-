@@ -29,6 +29,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { useWishlistDropdownContext } from "@lib/context/wishlist-dropdown-context"
 import { getDiscountList } from "./productDiscount"
 import './Wishlist.css';
+import { MEDUSA_BACKEND_URL } from "@lib/config";
 
 // Defining types for wishlist items and favorite items
 interface FavoriteItem {
@@ -52,7 +53,7 @@ type WishlistItem = {
 
 // Initializing the Medusa client
 const medusa = new Medusa({
-  baseUrl: "http://localhost:9000",
+  baseUrl: MEDUSA_BACKEND_URL,
   maxRetries: 3,
 });
 

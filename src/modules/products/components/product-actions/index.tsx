@@ -214,6 +214,7 @@ useEffect(() => {
 
   const handleAddToWishlist = async () => {
 
+    console.log("clicked handle Add to wishlist");
     if(!customer?.id) {
       setShowSignInPrompt(true);
       return;

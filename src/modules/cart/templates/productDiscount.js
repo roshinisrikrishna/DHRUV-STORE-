@@ -1,11 +1,11 @@
 // Import axios, a promise-based HTTP client, for making HTTP requests
-import axios from 'axios';
 import { MEDUSA_BACKEND_URL } from '@lib/config';
+import axios from 'axios';
 
 // Define an asynchronous function to get the discount list
 export const getDiscountList = async (productId) => {
   try {
-    console.log('inside getDiscountList ',productId);
+    // console.log('inside getDiscountList',productId);
     
     // Making a GET request using axios to fetch the discount list
     const response = await axios.get(`${MEDUSA_BACKEND_URL}/store/discountlist`);
@@ -59,37 +59,27 @@ const discountInfo = filteredDiscounts.map((discount) => {
 
 // Call the productDiscount API for each discountInfo
 for (const info of discountInfo) {
-    const { discount_id, condition_id, code, ends_at, value, type } = info;
-    const apiURL = `${MEDUSA_BACKEND_URL}/store/productDiscount?discount_id=${discount_id}&conditionId=${condition_id}`;
-  
-    // Making GET request to the productDiscount API
-    const productDiscountResponse = await axios.get(apiURL);
-  
-    // Logging the response data
-    // console.log(`Response for discount_id=${discount_id}, condition_id=${condition_id}:`, productDiscountResponse.data.products);
-  
-    // Check if productId matches with the id attribute of any product in productDiscountResponse
-    const matchingProduct = productDiscountResponse.data.products.find((product) => product.id === productId);
-  
-    console.log('matchingProduct', matchingProduct)
-    // If a matching product is found, log the product.id and productId
-    if (matchingProduct) {
-    //   console.log(`Matching product found for discount_id=${discount_id}, condition_id=${condition_id}:`);
-    //   console.log("product.id:", matchingProduct.id);
-    //   console.log("productId:", productId);
+  const { discount_id, condition_id, code, ends_at, value, type } = info;
+  const apiURL = `${MEDUSA_BACKEND_URL}/store/productDiscount?discount_id=${discount_id}&conditionId=${condition_id}`;
 
-    //   // Print code, ends_at, value, and type attributes' values of matchingProduct
-    //   console.log("code:", code);
-    //   console.log("ends_at:", ends_at);
-    //   console.log("value:", value);
-    //   console.log("type:", type);
+  // Making GET request to the productDiscount API
+  const productDiscountResponse = await axios.get(apiURL);
 
-      // Return info as response
-      return info;
-    } else {
-      console.log(`No matching product found for discount_id=${discount_id}, condition_id=${condition_id}`);
-    }
+  // Logging the response data
+  // console.log(`Response for discount_id=${discount_id}, condition_id=${condition_id}:`, productDiscountResponse.data.products);
+
+  // Check if productId matches with the id attribute of any product in productDiscountResponse
+  const matchingProduct = productDiscountResponse.data.products.find((product) => product.id === productId);
+
+  // If a matching product is found, log the product.id and productId
+  if (matchingProduct) {
+    // Return info along with id and title attributes of matchingProduct
+    return { ...info, id: matchingProduct.id, title: matchingProduct.title };
+  } else {
+    console.log(`No matching product found for discount_id=${discount_id}, condition_id=${condition_id}`);
+  }
 }
+
 
 // Return null if no matching product is found
 return null;
