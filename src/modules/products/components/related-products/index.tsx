@@ -33,9 +33,9 @@ const RelatedProducts = ({ product }: RelatedProductsProps) => {
       params.collection_id = [product.collection_id]
     }
 
-    if (product.tags) {
-      params.tags = product.tags.map((t) => t.value)
-    }
+    // if (product.tags) {
+    //   params.tags = product.tags.map((t) => t.value)
+    // }
 
     params.is_giftcard = false
 
@@ -53,6 +53,10 @@ const RelatedProducts = ({ product }: RelatedProductsProps) => {
 
   const previews = usePreviews({ pages: data?.pages, region: cart?.region })
 
+  //following is added code to show only 4 products that re related products
+  // Fetch only the first 4 previews
+const firstFourPreviews = useMemo(() => previews.slice(0, 4), [previews]);
+
   return (
     <div className="product-page-constraint">
       <div className="flex flex-col items-center text-center mb-16">
@@ -64,14 +68,15 @@ const RelatedProducts = ({ product }: RelatedProductsProps) => {
         </p>
       </div>
 
-      <ul className="grid grid-cols-2 small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8">
-        {previews.map((p) => (
+      {/* changed code to show only 4 related products */}
+      <ul className="grid grid-cols-2 small:grid-cols-3 medium:grid-cols-4 gap-x-3 gap-y-8">
+        {firstFourPreviews.map((p) => (
           <li key={p.id}>
             <ProductPreview {...p} />
           </li>
         ))}
-        {isLoading &&
-          !previews.length &&
+       {isLoading &&
+          !firstFourPreviews.length &&
           repeat(8).map((index) => (
             <li key={index}>
               <SkeletonProductPreview />
@@ -84,7 +89,7 @@ const RelatedProducts = ({ product }: RelatedProductsProps) => {
             </li>
           ))}
       </ul>
-      {hasNextPage && (
+      {/* {hasNextPage && (
         <div className="flex items-center justify-center mt-8">
           <Button
             isLoading={isLoading}
@@ -94,7 +99,7 @@ const RelatedProducts = ({ product }: RelatedProductsProps) => {
             Load more
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   )
 }

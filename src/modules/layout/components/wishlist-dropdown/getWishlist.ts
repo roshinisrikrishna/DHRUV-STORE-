@@ -23,9 +23,10 @@ export const getWishList = async (customer_id: any) => {
     const response = await axios.get(`${MEDUSA_BACKEND_URL}/store/wishlist?customer_id=${customer_id}`);
 
     // Logging the response data to the console for debugging purposes
-    // console.log("Get Response data GET WISHLIST:", response.data);
+    console.log("Get Response data GET WISHLIST:", response.data);
 
     // Return the data obtained from the response
+
     return response.data;
   } catch (error) {
     // Catching and logging any errors that occur during the request

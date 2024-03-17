@@ -5,7 +5,7 @@ import { MEDUSA_BACKEND_URL } from '@lib/config';
 // Define an asynchronous function to get the discount list
 export const getDiscountList = async (productId) => {
   try {
-    console.log('inside getDiscountList ',productId);
+    // console.log('inside getDiscountList');
     
     // Making a GET request using axios to fetch the discount list
     const response = await axios.get(`${MEDUSA_BACKEND_URL}/store/discountlist`);
@@ -71,7 +71,6 @@ for (const info of discountInfo) {
     // Check if productId matches with the id attribute of any product in productDiscountResponse
     const matchingProduct = productDiscountResponse.data.products.find((product) => product.id === productId);
   
-    console.log('matchingProduct', matchingProduct)
     // If a matching product is found, log the product.id and productId
     if (matchingProduct) {
     //   console.log(`Matching product found for discount_id=${discount_id}, condition_id=${condition_id}:`);

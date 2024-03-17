@@ -3,6 +3,7 @@
 
 // Importing the RegisterOptions type from "react-hook-form"
 import { RegisterOptions } from "react-hook-form";
+import { MEDUSA_BACKEND_URL } from "@lib/config";
 
 // Defining the interface for NameData
 interface NameData {
@@ -23,7 +24,7 @@ export const resetPassword = async (email: any, password: any) => {
     console.log(" password reset", password);
 
     // Making an HTTP POST request to the Medusa server to reset the password
-    const response = await fetch("http://195.35.20.220:9000/store/posts", {
+    const response = await fetch(`${MEDUSA_BACKEND_URL}/store/posts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
