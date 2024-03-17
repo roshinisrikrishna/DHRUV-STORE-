@@ -16,7 +16,7 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
   const tabs = useMemo(() => {
     return [
       {
-        label: "Product Information",
+        label: "Product Details",
         component: <ProductInfoTab product={product} />,
       },
       {
@@ -35,6 +35,7 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
             title={tab.label}
             headingSize="medium"
             value={tab.label}
+            style={{color:"#000"}}
           >
             {tab.component}
           </Accordion.Item>
@@ -45,45 +46,37 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
 }
 
 const ProductInfoTab = ({ product }: ProductTabsProps) => {
+
+  //included additional code to display the description as bullet points
+  const subtitle = product.description || '';
+  const subtitleLines = subtitle.split('\n');
+  
+  const formattedSubtitle = subtitleLines.map((line, index) => {
+    if (line.trim() === "") {
+      return null; // Skip blank lines
+    }
+    return (
+      <li key={index} className="custom-dot-list-item" style={{ marginBottom: '18px', fontSize: '15px', fontWeight: 500, color: "rgba(0,0,0,1)", fontFamily: "Klein, sans-serif", display: 'flex' }}>
+        <span style={{ marginRight: '13px' }}>&#x2022;</span>
+        <div style={{ width: "95%" }}>{line}</div>
+      </li>
+    );
+  });
+
+  //changed returned display to display the description as bullet points
   return (
     <div className="text-small-regular py-8">
-      <div className="grid grid-cols-2 gap-x-8">
-        <div className="flex flex-col gap-y-4">
+      <div className="grid grid-col gap-x-8">
+        <div className="flex flex-col gap-y-4 pl-9" style={{ width: "100%" }}>
           <div>
-            <span className="font-semibold">Material</span>
-            <p>{product.material ? product.material : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Country of origin</span>
-            <p>{product.origin_country ? product.origin_country : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Type</span>
-            <p>{product.type ? product.type.value : "-"}</p>
-          </div>
-        </div>
-        <div className="flex flex-col gap-y-4">
-          <div>
-            <span className="font-semibold">Weight</span>
-            <p>{product.weight ? `${product.weight} g` : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Dimensions</span>
-            <p>
-              {product.length && product.width && product.height
-                ? `${product.length}L x ${product.width}W x ${product.height}H`
-                : "-"}
-            </p>
+            <ul className="custom-dot-list" style={{ paddingLeft: '50px', width: "100%" }}>
+              {formattedSubtitle}
+            </ul>
           </div>
         </div>
       </div>
-      {product.tags?.length ? (
-        <div>
-          <span className="font-semibold">Tags</span>
-        </div>
-      ) : null}
     </div>
-  )
+  );
 }
 
 const ShippingInfoTab = () => {

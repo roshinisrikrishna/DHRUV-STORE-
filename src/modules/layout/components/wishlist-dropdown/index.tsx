@@ -141,7 +141,9 @@ const WishlistDropdown: React.FC<WishlistDropdownProps> = ({ isSideMenuOpen }) =
     };
 
     const fetchWishlist = async () => {
+      console.log('customer', customer)
       const response = await axios.get(`${MEDUSA_BACKEND_URL}/store/wishlist?customer_id=${customer?.id}`);
+      console.log('response fetchWishlist', response)
       if (response && response.data && response.data.wishlist && Array.isArray(response.data.wishlist)) {
         const wishlistPromises = response.data.wishlist.map(getListItem);
         const wishlistItems = await Promise.all(wishlistPromises);

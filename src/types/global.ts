@@ -13,6 +13,8 @@ export type FeaturedProduct = {
   title: string
   handle: string
   thumbnail?: string
+  buy_get_num?: number
+  buy_get_offer?: number
 }
 
 export type StoreNavData = {
@@ -53,6 +55,9 @@ export type ProductPreviewType = {
   title: string
   handle: string | null
   thumbnail: string | null
+  buy_get_num: number | null
+  buy_get_offer: number | null
+  sales_quantity: number | null
   created_at?: Date
   price?: {
     calculated_price: string
